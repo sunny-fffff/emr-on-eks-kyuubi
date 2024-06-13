@@ -1,0 +1,12 @@
+docker buildx 多镜像构建：
+
+DOCKER_BUILDKIT=1 docker build --platform=local -o . "https://github.com/docker/buildx.git"
+mkdir -p ~/.docker/cli-plugins
+mv buildx ~/.docker/cli-plugins/docker-buildx
+chmod a+x ~/.docker/cli-plugins/docker-buildx
+docker run --privileged --rm tonistiigi/binfmt --install all
+docker buildx create --name spark-build --use
+docker buildx inspect --bootstrap
+docker buildx ls
+docker buildx build --platform linux/amd64,linux/arm64 -t $ECR_URL/kyuubi-emr-eks:6.15 --build-arg SPARK_BASE_IMAGE=755674844232.dkr.ecr.us-east-1.amazonaws.com/spark/emr-6.15.0 --build-arg KYUUBI_VERSION=kyuubi-1.7.3 --push .
+
