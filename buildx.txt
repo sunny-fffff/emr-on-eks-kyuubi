@@ -8,5 +8,11 @@ docker run --privileged --rm tonistiigi/binfmt --install all
 docker buildx create --name spark-build --use
 docker buildx inspect --bootstrap
 docker buildx ls
-docker buildx build --platform linux/amd64,linux/arm64 -t $ECR_URL/kyuubi-emr-eks:6.15 --build-arg SPARK_BASE_IMAGE=755674844232.dkr.ecr.us-east-1.amazonaws.com/spark/emr-6.15.0 --build-arg KYUUBI_VERSION=kyuubi-1.7.3 --push .
-
+docker buildx build --platform linux/amd64,linux/arm64 \
+-t $ECR_URL/kyuubi-emr-eks:emr6.15_kyuubi1.8 \
+-f dockers/kyuubi/Dockerfile \
+--build-arg SPARK_BASE_IMAGE=755674844232.dkr.ecr.us-east-1.amazonaws.com/spark/emr-6.15.0 \
+--build-arg KYUUBI_VERSION=1.8.0 \
+--build-arg SPARK_VERSION=3.4.1 \
+--build-arg RANGER_VERSION=2.4.0 \
+--push .
